@@ -6,6 +6,7 @@ import org.hibernate.dialect.identity.IdentityColumnSupportImpl;
 
 public class SQLiteDialect extends Dialect {
 
+    @SuppressWarnings("deprecation")
     public SQLiteDialect() {
         super();
     }
@@ -16,7 +17,12 @@ public class SQLiteDialect extends Dialect {
     }
 
     @Override
-    public boolean supportsIdentityColumns() {
+    public String getDropForeignKeyString() {
+        return "";
+    }
+
+    @Override
+    public boolean supportsIfExistsBeforeTableName() {
         return true;
     }
 
@@ -26,37 +32,7 @@ public class SQLiteDialect extends Dialect {
     }
 
     @Override
-    public boolean supportsIfExistsBeforeTableName() {
-        return true;
-    }
-
-    @Override
     public boolean supportsCascadeDelete() {
-        return false;
-    }
-
-    @Override
-    public String getDropForeignKeyString() {
-        return "";
-    }
-
-    @Override
-    public boolean qualifyIndexName() {
-        return false;
-    }
-
-    @Override
-    public boolean supportsTemporaryTables() {
-        return true;
-    }
-
-    @Override
-    public String getCreateTemporaryTableString() {
-        return "create temporary table if not exists";
-    }
-
-    @Override
-    public boolean dropTemporaryTableAfterUse() {
         return false;
     }
 }
