@@ -19,22 +19,19 @@ public class KqlController {
     }
 
     @GetMapping("/query")
-    public String showQueryForm(Model model) {
+    public String home(Model model) {
+        // Add the initial KQL query object to the model
         model.addAttribute("kqlQuery", new KqlQuery());
-        return "query"; // Ensure this matches the name of your template (query.html)
+        return "query";  // This will render the query.html template
     }
 
     @PostMapping("/query")
-    public String generateKqlQuery(KqlQuery kqlQuery, Model model) {
-        kqlQueryService.save(kqlQuery);
-        model.addAttribute("message", "KQL Query Saved Successfully!");
-        model.addAttribute("kqlQuery", kqlQuery);
-        return "query";
-    }
+    public String saveQuery(KqlQuery kqlQuery, Model model) {
+        // Save the KQL query using the service
+        KqlQuery savedQuery = kqlQueryService.save(kqlQuery);
 
-    @GetMapping("/queries")
-    public String showSavedQueries(Model model) {
-        model.addAttribute("queries", kqlQueryService.findAll());
-        return "queries"; // Ensure this matches the name of your template (queries.html)
+        // Add the saved query to the model to display it on the page
+        model.addAttribute("kqlQuery", savedQuery);
+        return "query";  // This will render the query.html template again, displaying the saved query
     }
 }
