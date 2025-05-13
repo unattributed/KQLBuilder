@@ -41,4 +41,28 @@
 
         <br><br>
 
-        <label for="logType">Log Type:</
+        <label for="logType">Log Type:</label>
+        <select id="logType" name="logType" th:field="*{logType}">
+            <!-- Options populated by JS -->
+        </select>
+
+        <br><br>
+
+        <label for="filter">Filter:</label>
+        <input type="text" id="filter" name="filter" th:field="*{filter}" placeholder="e.g., statusCode == 200">
+
+        <br><br>
+
+        <button type="submit">Build Query</button>
+    </form>
+
+    <br>
+    <a href="/queries">View Saved Queries</a>
+
+    <div th:if="${kqlQuery.query}">
+        <h2>Generated KQL Query:</h2>
+        <pre th:text="${kqlQuery.query}"></pre>
+    </div>
+</body>
+</html>
+<!-- This HTML file is a Thymeleaf template for a KQL query builder. It allows users to select a cloud provider and log type, input filters, and generate KQL queries. -->
