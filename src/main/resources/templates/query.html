@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>KQLBuilder Query</title>
+</head>
+<body>
+    <h1>KQLBuilder Query Builder</h1>
+    
+    <form action="#" method="post">
+        <label for="cloud">Cloud Provider:</label>
+        <select id="cloud" name="cloud">
+            <option value="azure">Azure</option>
+            <option value="aws">AWS</option>
+            <option value="gcp">GCP</option>
+        </select>
+        
+        <br><br>
+        
+        <label for="logType">Log Type:</label>
+        <select id="logType" name="logType">
+            <option value="activity">Activity Logs</option>
+            <option value="audit">Audit Logs</option>
+            <option value="network">Network Logs</option>
+        </select>
+
+        <br><br>
+
+        <label for="filter">Filter:</label>
+        <input type="text" id="filter" name="filter" placeholder="e.g., statusCode == 200">
+
+        <br><br>
+
+        <button type="submit">Build Query</button>
+    </form>
+</body>
+</html>
+<!-- Compare this snippet from src/main/resources/templates/query.html: -->
