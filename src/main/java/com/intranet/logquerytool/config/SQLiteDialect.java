@@ -1,30 +1,23 @@
 package com.intranet.logquerytool.config;
 
-import java.sql.Types;
-
 import org.hibernate.dialect.Dialect;
-import org.hibernate.dialect.function.StandardAnsiSqlAggregationFunctions;
-import org.hibernate.type.descriptor.jdbc.VarcharJdbcType;
-import org.hibernate.type.descriptor.jdbc.IntegerJdbcType;
-import org.hibernate.type.SqlTypes;
+import org.hibernate.dialect.identity.IdentityColumnSupport;
+import org.hibernate.dialect.identity.IdentityColumnSupportImpl;
+import org.hibernate.sql.ast.SqlAstTranslatorFactory;
+import org.hibernate.sql.ast.spi.SqlAstTranslator;
+import org.hibernate.sql.ast.tree.Statement;
+import org.hibernate.sql.exec.spi.JdbcOperation;
+import org.hibernate.engine.jdbc.env.spi.JdbcEnvironment;
 
 public class SQLiteDialect extends Dialect {
 
     public SQLiteDialect() {
         super();
+    }
 
-        // Register standard types
-        registerColumnType(SqlTypes.INTEGER, "integer");
-        registerColumnType(SqlTypes.VARCHAR, "varchar");
-        registerColumnType(SqlTypes.FLOAT, "float");
-        registerColumnType(SqlTypes.DOUBLE, "double");
-        registerColumnType(SqlTypes.BOOLEAN, "boolean");
-        registerColumnType(SqlTypes.DATE, "date");
-        registerColumnType(SqlTypes.TIMESTAMP, "datetime");
-
-        // Register SQL functions (basic example)
-        this.getFunctionRegistry().register("lower", StandardAnsiSqlAggregationFunctions.LOWER);
-        this.getFunctionRegistry().register("upper", StandardAnsiSqlAggregationFunctions.UPPER);
+    @Override
+    public IdentityColumnSupport getIdentityColumnSupport() {
+        return new IdentityColumnSupportImpl();
     }
 
     @Override
@@ -38,11 +31,6 @@ public class SQLiteDialect extends Dialect {
     }
 
     @Override
-    public boolean supportsTemporaryTables() {
-        return true;
-    }
-
-    @Override
     public boolean supportsIfExistsBeforeTableName() {
         return true;
     }
@@ -53,13 +41,14 @@ public class SQLiteDialect extends Dialect {
     }
 
     @Override
-    public String getIdentityColumnString(int type) {
-        // For SQLite, identity column is always AUTOINCREMENT
-        return "integer";
-    }
-
-    @Override
-    public String getIdentitySelectString(String table, String column, int type) {
-        return "select last_insert_rowid()";
+    public SqlAstTranslatorFactory getSqlAstTranslatorFactory() {
+        return new SqlAstTranslatorFactory() {
+            @Override
+            public <T extends JdbcOperation> SqlAstTranslator<T> buildSqlAstTranslator(
+                    JdbcEnvironment jdbcEnvironment, Statement statement) {
+                throw new UnsupportedOperationException("SQLite custom SQL translator not implemented.");
+            }
+        };
     }
 }
+// Note: The above code is a custom SQLite dialect for Hibernate ORM.
