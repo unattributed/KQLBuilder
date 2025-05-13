@@ -28,6 +28,14 @@ public class KqlController {
         return "history";
     }   
 
+    @GetMapping("/queries")
+    public String viewSavedQueries(Model model) {
+        Iterable<KqlQuery> savedQueries = service.findAll();
+        model.addAttribute("queries", savedQueries);
+        return "queryHistory"; // resolves to templates/queryHistory.html
+    }
+    
+
     @PostMapping("/query")
     public String buildAndSaveQuery(
             @RequestParam String cloud,
