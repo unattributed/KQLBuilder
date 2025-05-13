@@ -18,14 +18,12 @@ public class KqlController {
     public String processQuery(
             @RequestParam("cloud") String cloud,
             @RequestParam("logType") String logType,
-            @RequestParam("keyword") String keyword,
+            @RequestParam("filter") String filter,
             Model model) {
-
-        // Simple mock KQL generation
-        String kql = String.format("Cloud: %s | LogType: %s | Search: %s", cloud, logType, keyword);
-
+    
+        String kql = String.format("%s logs in %s where %s", logType, cloud, filter);
         model.addAttribute("kqlQuery", kql);
-        return "query"; // Reload same page with result
+        return "query";
     }
 }
  // Note: In a real application, you would replace the mock KQL generation with actual logic to generate KQL queries based on the inputs.

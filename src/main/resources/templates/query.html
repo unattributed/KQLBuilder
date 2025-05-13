@@ -33,7 +33,7 @@
 <body>
     <h1>KQLBuilder Query Builder</h1>
 
-    <form action="#" method="post">
+    <<form action="/query" method="post">
         <label for="cloud">Cloud Provider:</label>
         <select id="cloud" name="cloud" onchange="updateLogTypes()">
             <option value="azure">Azure</option>
@@ -57,6 +57,12 @@
 
         <button type="submit">Build Query</button>
     </form>
+
+    <div th:if="${kqlQuery}">
+        <h2>Generated KQL Query:</h2>
+        <pre th:text="${kqlQuery}"></pre>
+    </div>
+
 </body>
 </html>
 <!-- Compare this snippet from src/main/resources/templates/query.html: -->
