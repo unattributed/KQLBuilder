@@ -65,6 +65,21 @@ KQLBuilder/
 │   └── application.yml
 ├── pom.xml
 └── README.md
+
+Modularize now to future-proof code:
+
+src/main/java/com/intranet/KQLBuilder/
+├── Main.java                  # Entry point
+├── CloudProvider.java         # Enum for providers
+├── KQLQueryGenerator.java     # Interface or abstract class
+├── generators/
+│   ├── AzureQueryGenerator.java
+│   ├── AWSQueryGenerator.java
+│   └── GCPQueryGenerator.java
+└── utils/
+    └── ConsoleInput.java      # Helper for reading input cleanly
+
+
 ```
 
 ## License
