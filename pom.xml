@@ -18,11 +18,9 @@
     <name>KQLBuilder</name>
 
     <properties>
-        <java.version>17</java.version> <!-- Target Java 17 -->
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding> <!-- Ensure source files are read using UTF-8 -->
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding> <!-- Ensure Maven reports use UTF-8 -->
-        <maven.compiler.source>${java.version}</maven.compiler.source> <!-- Set compiler source version -->
-        <maven.compiler.target>${java.version}</maven.compiler.target> <!-- Set compiler target version -->
+        <java.version>17</java.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     </properties>
 
     <dependencies>
@@ -38,19 +36,21 @@
             <artifactId>sqlite-jdbc</artifactId>
             <version>3.43.2.0</version>
         </dependency>
+    </dependencies>
 
     <build>
         <plugins>
-            <!-- Spring Boot executable jar -->
+            <!-- Spring Boot Plugin -->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
 
-            <!-- Compiler settings -->
+            <!-- Java Compiler Plugin -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.10.1</version>
                 <configuration>
                     <source>${java.version}</source>
                     <target>${java.version}</target>
@@ -58,4 +58,5 @@
             </plugin>
         </plugins>
     </build>
+
 </project>
