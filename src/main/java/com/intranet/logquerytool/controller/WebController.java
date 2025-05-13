@@ -7,9 +7,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class WebController {
 
-    @GetMapping("/")
-    public String home(Model model) {
-        model.addAttribute("message", "Welcome to KQLBuilder!");
-        return "index";
+    @GetMapping("/home")
+    public String homePage(Model model) {
+        return "home"; // resolves to templates/home.html
     }
 }
+// This controller handles the web interface for the KQLBuilder application.
