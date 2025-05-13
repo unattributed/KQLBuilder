@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Saved KQL Queries</title>
+</head>
+<body>
+    <h1>Saved KQL Queries</h1>
+
+    <table border="1">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Cloud</th>
+                <th>Log Type</th>
+                <th>Filter</th>
+                <th>Generated Query</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="query : ${queries}">
+                <td th:text="${query.id}"></td>
+                <td th:text="${query.cloud}"></td>
+                <td th:text="${query.logType}"></td>
+                <td th:text="${query.filter}"></td>
+                <td><pre th:text="${query.generatedQuery}"></pre></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <p><a href="/query">Back to Builder</a></p>
+</body>
+</html>
+<!-- This HTML file is used to display the saved KQL queries in a table format. 
+     It uses Thymeleaf for rendering dynamic content. The table displays the ID, 
+     cloud, log type, filter, and generated query for each saved query. -->
