@@ -3,11 +3,6 @@ package com.intranet.logquerytool.config;
 import org.hibernate.dialect.Dialect;
 import org.hibernate.dialect.identity.IdentityColumnSupport;
 import org.hibernate.dialect.identity.IdentityColumnSupportImpl;
-import org.hibernate.sql.ast.SqlAstTranslatorFactory;
-import org.hibernate.sql.ast.spi.SqlAstTranslator;
-import org.hibernate.sql.ast.tree.Statement;
-import org.hibernate.sql.exec.spi.JdbcOperation;
-import org.hibernate.engine.jdbc.env.spi.JdbcEnvironment;
 
 public class SQLiteDialect extends Dialect {
 
@@ -41,14 +36,27 @@ public class SQLiteDialect extends Dialect {
     }
 
     @Override
-    public SqlAstTranslatorFactory getSqlAstTranslatorFactory() {
-        return new SqlAstTranslatorFactory() {
-            @Override
-            public <T extends JdbcOperation> SqlAstTranslator<T> buildSqlAstTranslator(
-                    JdbcEnvironment jdbcEnvironment, Statement statement) {
-                throw new UnsupportedOperationException("SQLite custom SQL translator not implemented.");
-            }
-        };
+    public String getDropForeignKeyString() {
+        return "";
+    }
+
+    @Override
+    public boolean qualifyIndexName() {
+        return false;
+    }
+
+    @Override
+    public boolean supportsTemporaryTables() {
+        return true;
+    }
+
+    @Override
+    public String getCreateTemporaryTableString() {
+        return "create temporary table if not exists";
+    }
+
+    @Override
+    public boolean dropTemporaryTableAfterUse() {
+        return false;
     }
 }
-// Note: The above code is a custom SQLite dialect for Hibernate ORM.
