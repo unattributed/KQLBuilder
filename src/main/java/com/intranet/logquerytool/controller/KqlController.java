@@ -2,36 +2,42 @@ package com.intranet.logquerytool.controller;
 
 import com.intranet.logquerytool.model.KqlQuery;
 import com.intranet.logquerytool.service.KqlQueryService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
+@RequestMapping("/query")
 public class KqlController {
 
     private final KqlQueryService service;
 
+    @Autowired
     public KqlController(KqlQueryService service) {
         this.service = service;
     }
 
-    @GetMapping("/query")
+    @GetMapping
     public String showForm(Model model) {
         model.addAttribute("kqlQuery", new KqlQuery());
+        model.addAttribute("queries", service.findAll());
+        return "query"; // resolves to templates/query.html
+    }
+
+    @PostMapping
+    public String submitQuery(@ModelAttribute KqlQuery kqlQuery, Model model) {
+        service.save(kqlQuery);
+        model.addAttribute("kqlQuery", new KqlQuery());
+        model.addAttribute("queries", service.findAll());
         return "query";
     }
 
-    @PostMapping("/query")
-    public String submitForm(@ModelAttribute KqlQuery kqlQuery, Model model) {
-        // Build a sample query string
-        String query = String.format("// KQL for %s - %s\n| where %s",
-                kqlQuery.getCloudProvider(), kqlQuery.getLogType(), kqlQuery.getFilter());
-
-        kqlQuery.setQueryText(query);
-        service.save(kqlQuery);
-
-        model.addAttribute("kqlQuery", kqlQuery); // so query.html displays it
-
+    @GetMapping("/delete/{id}")
+    public String deleteQuery(@PathVariable Long id, Model model) {
+        service.deleteById(id);
+        model.addAttribute("kqlQuery", new KqlQuery());
+        model.addAttribute("queries", service.findAll());
         return "query";
     }
 }
