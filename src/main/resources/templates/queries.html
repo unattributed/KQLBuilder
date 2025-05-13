@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Saved KQL Queries</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 8px 12px;
+            border: 1px solid #ccc;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        h1 {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Saved KQL Queries</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Cloud</th>
+                <th>Log Type</th>
+                <th>Filter</th>
+                <th>Query</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="query : ${queries}">
+                <td th:text="${query.id}"></td>
+                <td th:text="${query.cloud}"></td>
+                <td th:text="${query.logType}"></td>
+                <td th:text="${query.filter}"></td>
+                <td><pre th:text="${query.query}"></pre></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <br>
+    <a href="/query">← Back to Query Builder</a>
+</body>
+</html>
