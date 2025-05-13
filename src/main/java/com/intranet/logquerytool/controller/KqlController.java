@@ -1,7 +1,7 @@
 package com.intranet.logquerytool.controller;
 
+import com.intranet.logquerytool.model.KqlQuery;
 import com.intranet.logquerytool.service.KqlQueryService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -9,23 +9,29 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 public class KqlController {
 
-    @Autowired
-    private KqlQueryService kqlQueryService;
+    private final KqlQueryService service;
+
+    public KqlController(KqlQueryService service) {
+        this.service = service;
+    }
 
     @GetMapping("/query")
-    public String showForm() {
-        return "query"; // show the form
+    public String showForm(Model model) {
+        model.addAttribute("kqlQuery", new KqlQuery());
+        return "query";
     }
 
     @PostMapping("/query")
-    public String buildQuery(@RequestParam String cloud,
-                             @RequestParam String logType,
-                             @RequestParam(required = false) String filter,
-                             Model model) {
+    public String submitForm(@ModelAttribute KqlQuery kqlQuery, Model model) {
+        // Build a sample query string
+        String query = String.format("// KQL for %s - %s\n| where %s",
+                kqlQuery.getCloudProvider(), kqlQuery.getLogType(), kqlQuery.getFilter());
 
-        String kql = kqlQueryService.buildQuery(cloud, logType, filter);
-        model.addAttribute("kqlQuery", kql);
-        return "query"; // render same view with query
+        kqlQuery.setQueryText(query);
+        service.save(kqlQuery);
+
+        model.addAttribute("kqlQuery", kqlQuery); // so query.html displays it
+
+        return "query";
     }
 }
-// This controller handles the HTTP requests for building KQL queries.
