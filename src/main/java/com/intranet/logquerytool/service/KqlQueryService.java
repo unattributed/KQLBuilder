@@ -1,41 +1,51 @@
 package com.intranet.logquerytool.service;
 
+import com.intranet.logquerytool.model.KqlQuery;
+import com.intranet.logquerytool.repository.KqlQueryRepository;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class KqlQueryService {
 
-    public String buildQuery(String cloud, String logType, String filter) {
-        String table;
+    private final KqlQueryRepository repository;
 
-        switch (cloud.toLowerCase()) {
-            case "azure":
-                table = "AzureDiagnostics";
-                break;
-            case "aws":
-                table = "AWSEvents";
-                break;
-            case "gcp":
-                table = "GCPLogs";
-                break;
-            default:
-                table = "UnknownLogs";
-        }
+    public KqlQueryService(KqlQueryRepository repository) {
+        this.repository = repository;
+    }
 
-        StringBuilder query = new StringBuilder();
-        query.append(table);
+    /**
+     * Save a new KQL query to the database.
+     * @param query the KqlQuery object to save
+     */
+    public void save(KqlQuery query) {
+        repository.save(query);
+    }
 
-        if (logType != null && !logType.isEmpty()) {
-            query.append(" | where LogType == '").append(logType).append("'");
-        }
+    /**
+     * Get a specific query by ID.
+     * @param id the ID of the query
+     * @return the KqlQuery object if found
+     */
+    public Optional<KqlQuery> getById(Long id) {
+        return repository.findById(id);
+    }
 
-        if (filter != null && !filter.isBlank()) {
-            query.append(" | where ").append(filter);
-        }
+    /**
+     * Retrieve all saved KQL queries.
+     * @return a list of all queries
+     */
+    public List<KqlQuery> getAllQueries() {
+        return (List<KqlQuery>) repository.findAll();
+    }
 
-        query.append(" | take 100");
-
-        return query.toString();
+    /**
+     * Delete a query by ID.
+     * @param id the ID of the query to delete
+     */
+    public void deleteById(Long id) {
+        repository.deleteById(id);
     }
 }
-// This service class is responsible for building KQL queries based on user input.
