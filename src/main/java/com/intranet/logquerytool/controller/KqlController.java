@@ -40,4 +40,10 @@ public class KqlController {
         model.addAttribute("queries", service.findAll());
         return "query";
     }
+    @GetMapping("/saved")
+    public String viewSavedQueries(Model model) {
+        Iterable<KqlQuery> queries = service.findAll();
+        model.addAttribute("queries", queries);
+        return "saved"; // resolves to saved.html
+    }
 }
