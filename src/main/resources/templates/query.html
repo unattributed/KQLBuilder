@@ -15,10 +15,8 @@
                 gcp: ["Admin Activity", "Data Access", "System Events"]
             };
 
-            // Clear existing options
             logTypeSelect.innerHTML = "";
 
-            // Add new options
             logTypes[selectedCloud].forEach(function(type) {
                 const option = document.createElement("option");
                 option.value = type.toLowerCase().replace(/\s+/g, "_");
@@ -33,36 +31,14 @@
 <body>
     <h1>KQLBuilder Query Builder</h1>
 
-    <form th:action="@{/query}" method="post" th:object="${kqlQuery}">
+    <form action="#" method="post" th:object="${kqlQuery}">
         <label for="cloud">Cloud Provider:</label>
-        <select id="cloud" th:field="*{cloudProvider}" onchange="updateLogTypes()">
+        <select id="cloud" name="cloud" onchange="updateLogTypes()" th:field="*{cloud}">
             <option value="azure">Azure</option>
             <option value="aws">AWS</option>
             <option value="gcp">GCP</option>
         </select>
-    
-        <br><br>
-    
-        <label for="logType">Log Type:</label>
-        <select id="logType" th:field="*{logType}">
-            <!-- Populated by JS -->
-        </select>
-    
-        <br><br>
-    
-        <label for="filter">Filter:</label>
-        <input type="text" id="filter" th:field="*{filter}" placeholder="e.g., statusCode == 200">
-    
-        <br><br>
-    
-        <button type="submit">Build Query</button>
-    </form>
-    <br><br>
-    <div th:if="${kqlQuery}">
-        <h2>Generated KQL Query:</h2>
-        <pre th:text="${kqlQuery}"></pre>
-    </div>
 
-</body>
-</html>
-<!-- Compare this snippet from src/main/resources/templates/query.html: -->
+        <br><br>
+
+        <label for="logType">Log Type:</
