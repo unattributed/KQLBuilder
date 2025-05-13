@@ -35,6 +35,7 @@
                 <th>Log Type</th>
                 <th>Filter</th>
                 <th>Query</th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -44,6 +45,11 @@
                 <td th:text="${query.logType}"></td>
                 <td th:text="${query.filter}"></td>
                 <td><pre th:text="${query.query}"></pre></td>
+                <td>
+                    <form th:action="@{'/queries/delete/' + ${query.id}}" method="post" style="display:inline;">
+                        <button type="submit">Delete</button>
+                    </form>
+                </td>
             </tr>
         </tbody>
     </table>

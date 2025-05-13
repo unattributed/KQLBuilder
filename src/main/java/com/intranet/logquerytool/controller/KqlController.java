@@ -34,7 +34,11 @@ public class KqlController {
         model.addAttribute("queries", savedQueries);
         return "queryHistory"; // resolves to templates/queryHistory.html
     }
-    
+    @PostMapping("/queries/delete/{id}")
+    public String deleteQuery(@PathVariable Long id) {
+        service.deleteById(id);
+        return "redirect:/queries";
+    }
 
     @PostMapping("/query")
     public String buildAndSaveQuery(
