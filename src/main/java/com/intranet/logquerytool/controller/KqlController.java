@@ -22,6 +22,12 @@ public class KqlController {
         return "query";
     }
 
+    @GetMapping("/history")
+    public String showHistory(Model model) {
+        model.addAttribute("queries", service.findAll());
+        return "history";
+    }   
+
     @PostMapping("/query")
     public String buildAndSaveQuery(
             @RequestParam String cloud,
