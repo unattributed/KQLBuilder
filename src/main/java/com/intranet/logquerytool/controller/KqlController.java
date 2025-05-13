@@ -9,8 +9,8 @@ public class KqlController {
 
     @GetMapping("/query")
     public String queryPage(Model model) {
-        model.addAttribute("message", "Welcome to KQLBuilder Web UI");
-        return "index"; // Or "query" if you have a dedicated query.html
+        model.addAttribute("message", "Build your query below:");
+        return "query"; // renders query.html
     }
 }
 // This controller handles the web interface for the KQLBuilder application.
