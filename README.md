@@ -33,7 +33,7 @@ mvn clean install
 mvn spring-boot:run
 ```
 
-Then open your browser to [http://localhost:8080](http://localhost:8080)
+Then open your browser to [localhost:9191](http://localhost:9191)
 
 ## Deployment Options
 
