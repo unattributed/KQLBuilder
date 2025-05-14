@@ -1,56 +1,100 @@
 package com.intranet.logquerytool.config;
 
-import java.sql.Types;
-
 import org.hibernate.dialect.Dialect;
+import org.hibernate.dialect.identity.IdentityColumnSupport;
+import org.hibernate.dialect.identity.IdentityColumnSupportImpl;
+import org.hibernate.engine.jdbc.env.spi.NameQualifierSupport;
+import org.hibernate.query.sqm.FetchClauseType;
+import org.hibernate.type.SqlTypes;
+import org.hibernate.boot.model.TypeContributions;
+import org.hibernate.service.ServiceRegistry;
+import org.hibernate.type.BasicTypeRegistry;
+import org.hibernate.type.spi.TypeConfiguration;
+
+import java.sql.Types;
 
 public class SQLiteDialect extends Dialect {
 
     public SQLiteDialect() {
         super();
-        // Register column types as needed, adjust based on the required column types
-        // Example: registerHibernateType(Types.VARCHAR, "string");
     }
 
     @Override
-    public boolean supportsExpectedLobUsagePattern() {
-        return true; // SQLite supports LOB usage pattern
+    public IdentityColumnSupport getIdentityColumnSupport() {
+        return new IdentityColumnSupportImpl() {
+            @Override
+            public boolean supportsIdentityColumns() {
+                return true;
+            }
+
+            @Override
+            public String getIdentitySelectString(String table, String column, int type) {
+                return "select last_insert_rowid()";
+            }
+
+            @Override
+            public String getIdentityColumnString(int type) {
+                return "integer primary key autoincrement";
+            }
+
+            @Override
+            public boolean hasDataTypeInIdentityColumn() {
+                return false;
+            }
+        };
     }
 
     @Override
-    public String getTypeName(int code) {
-        if (code == Types.VARCHAR) {
-            return "text";
-        } else if (code == Types.INTEGER) {
-            return "integer";
-        }
-        return super.getTypeName(code); // Default type names
-    }
-
-    @Override
-    public void registerColumnType(int code, String name) {
-        // Example of registering types if needed
-        super.registerColumnType(code, name);
+    public void contributeTypes(TypeContributions typeContributions, ServiceRegistry serviceRegistry) {
+        BasicTypeRegistry registry = typeContributions.getTypeConfiguration().getBasicTypeRegistry();
+        registry.register(new org.hibernate.type.descriptor.jdbc.internal.StandardSqlTypeDescriptor(SqlTypes.INTEGER, "integer"));
+        registry.register(new org.hibernate.type.descriptor.jdbc.internal.StandardSqlTypeDescriptor(SqlTypes.VARCHAR, "text"));
+        registry.register(new org.hibernate.type.descriptor.jdbc.internal.StandardSqlTypeDescriptor(SqlTypes.BOOLEAN, "boolean"));
+        registry.register(new org.hibernate.type.descriptor.jdbc.internal.StandardSqlTypeDescriptor(SqlTypes.DOUBLE, "double"));
+        registry.register(new org.hibernate.type.descriptor.jdbc.internal.StandardSqlTypeDescriptor(SqlTypes.FLOAT, "float"));
+        registry.register(new org.hibernate.type.descriptor.jdbc.internal.StandardSqlTypeDescriptor(SqlTypes.BIGINT, "bigint"));
+        registry.register(new org.hibernate.type.descriptor.jdbc.internal.StandardSqlTypeDescriptor(SqlTypes.TIMESTAMP, "datetime"));
+        registry.register(new org.hibernate.type.descriptor.jdbc.internal.StandardSqlTypeDescriptor(SqlTypes.BINARY, "blob"));
     }
 
     @Override
     public boolean supportsCascadeDelete() {
-        return true; // SQLite supports cascading deletes
-    }
-
-    public boolean supportsIdentityColumns() {
         return true;
     }
 
-    public String getIdentitySelectString() {
-        return "select last_insert_rowid()";
+    @Override
+    public NameQualifierSupport getNameQualifierSupport() {
+        return NameQualifierSupport.NONE;
     }
 
-    public String getIdentityColumnString() {
-        return "integer primary key autoincrement";
+    @Override
+    public boolean supportsIfExistsBeforeTableName() {
+        return true;
     }
 
-    public boolean hasDataTypeInIdentityColumn() {
+    @Override
+    public boolean supportsIfExistsAfterTableName() {
         return false;
     }
+
+    @Override
+    public boolean supportsExpectedLobUsagePattern() {
+        return true;
+    }
+
+    @Override
+    public boolean supportsCommentOn() {
+        return false;
+    }
+
+    @Override
+    public boolean supportsTupleDistinctCounts() {
+        return false;
+    }
+
+    @Override
+    public boolean supportsValuesList() {
+        return true;
+    }
 }
+// Note: The above code is a custom SQLite dialect for Hibernate ORM.
