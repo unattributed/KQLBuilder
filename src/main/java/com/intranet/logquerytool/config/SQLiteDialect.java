@@ -17,7 +17,7 @@ import java.sql.Types;
 public class SQLiteDialect extends Dialect {
 
     public SQLiteDialect() {
-        super(DatabaseVersion.make(3, 36)); // Specify SQLite version 3.36 as an example
+        super(DatabaseVersion.make(3, 36)); // Use DatabaseVersion to specify SQLite version
         this.registerColumnTypes(); // Ensure column types are registered in the default constructor
     }
 
