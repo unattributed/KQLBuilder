@@ -8,7 +8,6 @@ import org.hibernate.engine.jdbc.env.spi.NameQualifierSupport;
 
 public class SQLiteDialect extends Dialect {
 
-    @SuppressWarnings("deprecation")
     public SQLiteDialect() {
         super();
     }
