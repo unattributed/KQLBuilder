@@ -5,8 +5,10 @@ import org.hibernate.dialect.identity.IdentityColumnSupport;
 import org.hibernate.dialect.identity.IdentityColumnSupportImpl;
 import org.hibernate.engine.jdbc.env.spi.NameQualifierSupport;
 
+
 public class SQLiteDialect extends Dialect {
 
+    @SuppressWarnings("deprecation")
     public SQLiteDialect() {
         super();
     }
@@ -36,10 +38,14 @@ public class SQLiteDialect extends Dialect {
         };
     }
 
-    @Override
-    public boolean supportsCascadeDelete() {
-        return true;
-    }
+        /**
+         * This method is not part of the Dialect class in Hibernate 6.x, 
+         * so the @Override annotation causes compilation to fail.
+         */
+        // @Override
+        // public boolean supportsCascadeDelete() {
+        //     return true;
+        // }
 
     @Override
     public NameQualifierSupport getNameQualifierSupport() {
