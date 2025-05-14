@@ -15,7 +15,8 @@ KQLBuilder is a Java-based web application that provides a simple UI for buildin
 - Maven 3.8+
 - Node.js (optional, for UI assets)
 
-## Getting Started
+## Getting Started 
+**Be Advised that the project is still in development**
 
 ### Clone the repository
 ```bash
