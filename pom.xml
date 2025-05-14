@@ -4,6 +4,11 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
+    <properties>
+        <maven.compiler.source>17</maven.compiler.source> <!-- Use Java 17 -->
+        <maven.compiler.target>17</maven.compiler.target> <!-- Ensure compatibility with Java 17 -->
+    </properties>
+
     <groupId>com.intranet</groupId>
     <artifactId>KQLBuilder</artifactId>
     <version>1.0.0</version>
@@ -14,14 +19,14 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
-            <version>2.7.5</version> <!-- Replace with the desired version -->
+            <version>3.2.5</version> <!-- Updated to the latest version compatible with Spring Boot 3.x -->
         </dependency>
 
         <!-- Spring Boot Starter JDBC for Database Integration -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jdbc</artifactId>
-            <version>2.7.5</version> <!-- Replace with the desired version -->
+            <version>3.2.5</version> <!-- Updated to the latest version compatible with Spring Boot 3.x -->
         </dependency>
 
         <!-- SQLite JDBC Driver -->
@@ -31,21 +36,32 @@
             <version>3.43.2.0</version>
         </dependency>
 
+        <!-- filepath: /pom.xml -->
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-core</artifactId>
+            <version>5.6.15.Final</version> <!-- Use a version compatible with your project -->
+        </dependency>
+
         <!-- Spring Boot Starter Test (for unit tests, optional) -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
-            <version>2.7.5</version> <!-- Replace with the desired version -->
+            <version>3.2.5</version> <!-- Updated to match Spring Boot version -->
             <scope>test</scope>
         </dependency>
 
-        <!-- Hibernate Core for ORM (Object-Relational Mapping) -->
+        <!-- Add your dependencies here -->
         <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-core</artifactId>
-            <version>6.2.6.Final</version> <!-- Use the appropriate version -->
+            <groupId>jakarta.persistence</groupId>
+            <artifactId>jakarta.persistence-api</artifactId>
+            <version>3.1.0</version>
         </dependency>
-
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+            <version>3.2.5</version> <!-- Updated to the latest version compatible with Spring Boot 3.x -->
+        </dependency>
     </dependencies>
 
     <build>
@@ -53,6 +69,7 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>3.2.5</version> <!-- Ensuring compatibility with Spring Boot version -->
             </plugin>
         </plugins>
     </build>
