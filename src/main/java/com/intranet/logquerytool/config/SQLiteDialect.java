@@ -4,14 +4,6 @@ import org.hibernate.dialect.Dialect;
 import org.hibernate.dialect.identity.IdentityColumnSupport;
 import org.hibernate.dialect.identity.IdentityColumnSupportImpl;
 import org.hibernate.engine.jdbc.env.spi.NameQualifierSupport;
-import org.hibernate.query.sqm.FetchClauseType;
-import org.hibernate.type.SqlTypes;
-import org.hibernate.boot.model.TypeContributions;
-import org.hibernate.service.ServiceRegistry;
-import org.hibernate.type.BasicTypeRegistry;
-import org.hibernate.type.spi.TypeConfiguration;
-
-import java.sql.Types;
 
 public class SQLiteDialect extends Dialect {
 
@@ -42,19 +34,6 @@ public class SQLiteDialect extends Dialect {
                 return false;
             }
         };
-    }
-
-    @Override
-    public void contributeTypes(TypeContributions typeContributions, ServiceRegistry serviceRegistry) {
-        BasicTypeRegistry registry = typeContributions.getTypeConfiguration().getBasicTypeRegistry();
-        registry.register(new org.hibernate.type.descriptor.jdbc.internal.StandardSqlTypeDescriptor(SqlTypes.INTEGER, "integer"));
-        registry.register(new org.hibernate.type.descriptor.jdbc.internal.StandardSqlTypeDescriptor(SqlTypes.VARCHAR, "text"));
-        registry.register(new org.hibernate.type.descriptor.jdbc.internal.StandardSqlTypeDescriptor(SqlTypes.BOOLEAN, "boolean"));
-        registry.register(new org.hibernate.type.descriptor.jdbc.internal.StandardSqlTypeDescriptor(SqlTypes.DOUBLE, "double"));
-        registry.register(new org.hibernate.type.descriptor.jdbc.internal.StandardSqlTypeDescriptor(SqlTypes.FLOAT, "float"));
-        registry.register(new org.hibernate.type.descriptor.jdbc.internal.StandardSqlTypeDescriptor(SqlTypes.BIGINT, "bigint"));
-        registry.register(new org.hibernate.type.descriptor.jdbc.internal.StandardSqlTypeDescriptor(SqlTypes.TIMESTAMP, "datetime"));
-        registry.register(new org.hibernate.type.descriptor.jdbc.internal.StandardSqlTypeDescriptor(SqlTypes.BINARY, "blob"));
     }
 
     @Override
@@ -97,4 +76,3 @@ public class SQLiteDialect extends Dialect {
         return true;
     }
 }
-// Note: The above code is a custom SQLite dialect for Hibernate ORM.
