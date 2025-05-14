@@ -1,100 +1,89 @@
 package com.intranet.logquerytool.config;
 
-import org.hibernate.dialect.Dialect;
-import org.hibernate.dialect.function.SQLFunction;
-import org.hibernate.dialect.function.StandardSQLFunction;
-import org.hibernate.engine.jdbc.dialect.internal.StandardAnsiSqlAggregationFunctions;
-import org.hibernate.sql.ast.spi.SqlAstTranslator;
-import org.hibernate.type.StandardSQLFunction;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
-import java.sql.Types;
+import org.hibernate.dialect.Dialect;
+import org.hibernate.query.spi.Limit;
+import org.hibernate.dialect.DatabaseVersion;
 
 public class SQLiteDialect extends Dialect {
 
-    // Constructor
     public SQLiteDialect() {
-        super();
+        super(DatabaseVersion.make(3, 36)); // Specify SQLite version, e.g., 3.36
     }
 
-    // Overriding method for SQLite-specific identity column handling
-    @Override
-    public boolean supportsIdentityColumns() {
-        return true; // SQLite supports identity columns
-    }
-
-    @Override
-    public boolean hasDataTypeInIdentityColumn() {
-        return false; // SQLite does not have data types in identity columns
-    }
-
-    @Override
-    public String getIdentitySelectString(String table, String column, int type) {
-        return "select last_insert_rowid()"; // SQLite syntax for getting last inserted row id
-    }
-
-    @Override
-    public String getIdentityColumnString(int type) {
-        return "integer primary key autoincrement"; // SQLite column definition for auto-increment
-    }
-
-    @Override
     public boolean supportsLimit() {
-        return true; // SQLite supports LIMIT
+        return true;  // SQLite supports LIMIT
     }
 
     @Override
-    public String getLimitString(String query, boolean hasOffset) {
-        return query + (hasOffset ? " limit ? offset ?" : " limit ?");
+    public org.hibernate.dialect.pagination.LimitHandler getLimitHandler() {
+        return new org.hibernate.dialect.pagination.LimitHandler() {
+            @Override
+            public boolean supportsLimit() {
+                return true;
+            }
+
+            @Override
+            public boolean supportsLimitOffset() {
+                return true;
+            }
+
+            @Override
+            public boolean supportsOffset() {
+                return true; // SQLite supports OFFSET
+            }
+
+            @Override
+            public String processSql(String sql, Limit limit) {
+                if (limit.getFirstRow() > 0) {
+                    return sql + " LIMIT " + limit.getMaxRows() + " OFFSET " + limit.getFirstRow();
+                } else {
+                    return sql + " LIMIT " + limit.getMaxRows();
+                }
+            }
+
+            @Override
+            public int bindLimitParametersAtStartOfQuery(Limit limit, PreparedStatement statement, int index) throws SQLException {
+                statement.setInt(index, limit.getMaxRows());
+                return index + 1;
+            }
+
+            @Override
+            public int bindLimitParametersAtEndOfQuery(Limit limit, PreparedStatement statement, int index) throws SQLException {
+                if (limit.getFirstRow() > 0) {
+                    statement.setInt(index, limit.getFirstRow());
+                    return index + 1;
+                }
+                return index;
+            }
+
+            @Override
+            public void setMaxRows(Limit limit, PreparedStatement statement) throws SQLException {
+                statement.setMaxRows(limit.getMaxRows());
+            }
+        };
     }
 
-    @Override
-    public boolean supportsTransactionIsolationLevel(int level) {
-        return level == TRANSACTION_READ_COMMITTED;
-    }
-
-    @Override
-    public boolean supportsSavepoints() {
-        return true; // SQLite supports savepoints
-    }
-
-    @Override
     public String getCreateTemporaryTableString() {
-        return "create temporary table if not exists"; // SQLite temporary table creation
+        return "CREATE TEMPORARY TABLE";  // SQLite's temporary table creation
     }
 
-    @Override
     public boolean supportsDropTableIfExists() {
-        return true; // SQLite supports 'DROP TABLE IF EXISTS'
+        return true;  // SQLite supports DROP IF EXISTS
     }
 
-    @Override
-    public void registerColumnType(int code, String name) {
-        if (code == Types.BIT) {
-            registerColumnType(code, "boolean");
-        } else {
-            super.registerColumnType(code, name); // Let Hibernate handle other types
-        }
+    public String getFunction(String functionName) {
+        // Return the function name for SQLite
+        return functionName;
     }
 
-    // SQL Function handling
-    @Override
-    public SQLFunction getFunction(String functionName) {
-        // Example of adding custom functions for SQLite, replace with actual functions
-        if ("my_custom_function".equalsIgnoreCase(functionName)) {
-            return new StandardSQLFunction(functionName, Types.INTEGER);
-        }
-        return super.getFunction(functionName); // Fallback to default
-    }
-
-    @Override
     public String getDropTableString() {
-        return "drop table if exists"; // SQLite drop table syntax
+        return "DROP TABLE IF EXISTS";  // SQLite's DROP table statement
     }
 
-    @Override
     public boolean isReadOnly() {
-        return false; // SQLite is not necessarily read-only
+        return false;  // SQLite is not read-only by default
     }
-
-    // Other necessary overrides...
 }
