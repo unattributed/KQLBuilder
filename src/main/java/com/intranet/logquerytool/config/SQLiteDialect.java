@@ -1,16 +1,15 @@
 package com.intranet.logquerytool.config;
 
+import org.hibernate.dialect.Dialect;
+import org.hibernate.dialect.pagination.LimitHandler;
+import org.hibernate.query.spi.Limit;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-
-import org.hibernate.dialect.Dialect;
-import org.hibernate.query.spi.Limit;
-import org.hibernate.dialect.DatabaseVersion;
 
 public class SQLiteDialect extends Dialect {
 
     public SQLiteDialect() {
-        super(DatabaseVersion.make(3, 36)); // Specify SQLite version, e.g., 3.36
+        super(null); // Pass null or a DialectResolutionInfo instance if required
     }
 
     public boolean supportsLimit() {
@@ -18,8 +17,8 @@ public class SQLiteDialect extends Dialect {
     }
 
     @Override
-    public org.hibernate.dialect.pagination.LimitHandler getLimitHandler() {
-        return new org.hibernate.dialect.pagination.LimitHandler() {
+    public LimitHandler getLimitHandler() {
+        return new LimitHandler() {
             @Override
             public boolean supportsLimit() {
                 return true;
